@@ -334,38 +334,21 @@ html, body {
             });
 
             function displayMessage(message, type) {
-        const mainDiv = $(".chat-logs");
-        const INDEX = mainDiv.children().length + 1;
+                const mainDiv = $(".chat-logs");
+                const INDEX = mainDiv.children().length + 1;
 
-        // Create a div for the message
-        let str = `<div id='cm-msg-${INDEX}' class="chat-msg ${type}">`;
-        str += `  <div class="cm-msg-text">${message}</div>`;
-        
-        // Calculate and display response time for bot messages
-        if (type === 'bot') {
-            const responseTime = calculateResponseTime();
-            str += `  <div class="cm-msg-text">${responseTime} seconds</div>`;
-        }
+                // Create a div for the message
+                let str = `<div id='cm-msg-${INDEX}' class="chat-msg ${type}">`;
+                str += `  <div class="cm-msg-text">${message}</div>`;
+                str += '</div>';
+                mainDiv.append(str);
 
-        str += '</div>';
+                $(`#cm-msg-${INDEX}`).hide().fadeIn(300);
 
-        mainDiv.append(str);
-
-        $(`#cm-msg-${INDEX}`).hide().fadeIn(300);
-
-        if (type === 'self') {
-            // Record the start time when the user sends a request
-            startTime = new Date().getTime();
-            $("#chat-input").val('');
-        }
-    }
-
-    function calculateResponseTime() {
-        // Calculate elapsed time since the user sent a request
-        const elapsedTime = (new Date().getTime() - startTime) / 1000; // Convert milliseconds to seconds
-        return `Response Time: ${elapsedTime.toFixed(2)}`;
-    }
-
+                if (type === 'self') {
+                    $("#chat-input").val('');
+                }
+            }
 
             function simulateChatbotResponse(userMessage) {
             const apiUrl = 'https://1aa5-180-191-16-79.ngrok-free.app/chatbot';
