@@ -309,6 +309,7 @@ html, body {
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     <script>
         $(function () {
+            let startTime;
             let offensiveWordCount = 0;
             let isBanned = false;
 
@@ -333,21 +334,38 @@ html, body {
             });
 
             function displayMessage(message, type) {
-                const mainDiv = $(".chat-logs");
-                const INDEX = mainDiv.children().length + 1;
+        const mainDiv = $(".chat-logs");
+        const INDEX = mainDiv.children().length + 1;
 
-                // Create a div for the message
-                let str = `<div id='cm-msg-${INDEX}' class="chat-msg ${type}">`;
-                str += `  <div class="cm-msg-text">${message}</div>`;
-                str += '</div>';
-                mainDiv.append(str);
+        // Create a div for the message
+        let str = `<div id='cm-msg-${INDEX}' class="chat-msg ${type}">`;
+        str += `  <div class="cm-msg-text">${message}</div>`;
+        
+        // Calculate and display response time for bot messages
+        if (type === 'bot') {
+            const responseTime = calculateResponseTime();
+            str += `  <div class="cm-msg-text">${responseTime} seconds</div>`;
+        }
 
-                $(`#cm-msg-${INDEX}`).hide().fadeIn(300);
+        str += '</div>';
 
-                if (type === 'self') {
-                    $("#chat-input").val('');
-                }
-            }
+        mainDiv.append(str);
+
+        $(`#cm-msg-${INDEX}`).hide().fadeIn(300);
+
+        if (type === 'self') {
+            // Record the start time when the user sends a request
+            startTime = new Date().getTime();
+            $("#chat-input").val('');
+        }
+    }
+
+    function calculateResponseTime() {
+        // Calculate elapsed time since the user sent a request
+        const elapsedTime = (new Date().getTime() - startTime) / 1000; // Convert milliseconds to seconds
+        return `Response Time: ${elapsedTime.toFixed(2)}`;
+    }
+
 
             function simulateChatbotResponse(userMessage) {
             const apiUrl = 'https://2e47-2001-fd8-484-c001-3489-5ccf-4baf-2d91.ngrok-free.app/chatbot';
